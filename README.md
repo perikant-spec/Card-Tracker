@@ -6,7 +6,7 @@ Private Android tracker for outstanding balance across six credit cards
 ## Build order (do not skip ahead)
 
 1. `core` engine: money, ledger states, billed/unbilled maths, reconciliation, matching. **Written; unit tests written but not yet run** (the authoring sandbox could not reach Maven Central). Run `gradle :core:test` first.
-2. SMS fixtures: export your real messages into `fixtures/real/` (git-ignored). Redacted samples go in `fixtures/sample/`.
+2. SMS fixtures: export with SMS Backup & Restore (SyncTech), then run `tools/extract_fixtures.py` (`list-senders`, then `extract`). Outputs land in `fixtures/real/` (git-ignored). Review `redacted.jsonl` by hand before sharing any line.
 3. Issuer parsers, one per bank, each tested against real fixtures. Unknown formats go to the review queue.
 4. Persistence (Room, encrypted) as an adapter over `core`.
 5. Android shell: SMS receiver + inbox backfill, permissions.
