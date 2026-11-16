@@ -1,0 +1,9 @@
+.gradle/
+build/
+*.iml
+.idea/
+local.properties
+*.keystore
+*.jks
+# Real SMS exports contain personal data; never commit them.
+fixtures/real/
