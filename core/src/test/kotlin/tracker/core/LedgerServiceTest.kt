@@ -491,6 +491,18 @@ class LedgerServiceTest {
         assertEquals(emptyList(), Defaults.allowlist()["SCAPIA"])
     }
 
+    @Test fun `seeding fills defaults even when the store already lists every issuer with no senders`() {
+        // The Room adapter reports each known issuer as a key with an empty list.
+        val inner = InMemoryLedgerStore()
+        val roomLike = object : LedgerStore by inner {
+            override fun allowlist(): Map<String, List<String>> =
+                inner.cards().associate { it.issuer to emptyList<String>() } + inner.allowlist()
+        }
+        LedgerService(roomLike, parserFactory = { StubParser }).seedDefaults()
+        assertEquals(listOf("HDFCBK"), roomLike.allowlist()["HDFC"])
+        assertEquals(emptyList(), roomLike.allowlist()["SCAPIA"])
+    }
+
     @Test fun `card config is validated`() {
         val f = Fixture()
         assertFailsWith<IllegalArgumentException> { f.service.saveCard(f.card.copy(last4 = "12a4")) }

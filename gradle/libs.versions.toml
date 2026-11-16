@@ -1,0 +1,50 @@
+# NOT RESOLVED OR COMPILED BY THE AUTHOR: the authoring sandbox could not reach Maven Central
+# or Google's Maven repository. These are versions believed to exist and to work together
+# (a mid-2025 set, deliberately not the newest). If one fails to resolve, see
+# docs/BUILD_AND_TEST.md "If a dependency version does not resolve".
+#
+# Compatibility notes:
+#   Gradle wrapper 8.14.3  (AGP 8.11 needs Gradle >= 8.13)
+#   AGP 8.11.1             (supports compileSdk 36)
+#   Kotlin 2.2.0           (Compose compiler ships as the kotlin.plugin.compose plugin, same version)
+#   KSP 2.2.0-2.0.2        (first half must equal the Kotlin version)
+#   Room 2.7.2             (works with KSP2)
+[versions]
+agp = "8.11.1"
+kotlin = "2.2.0"
+ksp = "2.2.0-2.0.2"
+composeBom = "2025.06.00"
+activityCompose = "1.10.1"
+lifecycle = "2.9.1"
+navigation = "2.9.0"
+coreKtx = "1.16.0"
+room = "2.7.2"
+biometric = "1.1.0"
+sqlcipher = "4.9.0"
+coroutines = "1.10.2"
+junit = "4.13.2"
+
+[libraries]
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+junit = { module = "junit:junit", version.ref = "junit" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

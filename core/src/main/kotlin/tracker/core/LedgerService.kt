@@ -64,7 +64,7 @@ class LedgerService(
             for (card in Defaults.cards()) if (card.id !in existing) store.upsertCard(card)
             val current = store.allowlist()
             for ((issuer, patterns) in Defaults.allowlist()) {
-                if (!current.containsKey(issuer)) store.setAllowlist(issuer, patterns)
+                if (current[issuer].isNullOrEmpty()) store.setAllowlist(issuer, patterns)
             }
             store.putSetting(Defaults.SETTING_SEEDED, "1")
         }

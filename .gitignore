@@ -7,3 +7,11 @@ local.properties
 *.jks
 # Real SMS exports contain personal data; never commit them.
 fixtures/real/
+.kotlin/
+captures/
+*.apk
+*.aab
+# Signing material: never commit.
+keystore.properties
+*.p12
+*.pem

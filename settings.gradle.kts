@@ -1,5 +1,22 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 rootProject.name = "card-tracker"
 
-// Pure-Kotlin engine first (parser, ledger, reconciliation). The Android app
-// module is added later and depends on :core.
+// :core is the pure-Kotlin engine (parsers, ledger, reconciliation, backup). No Android types.
+// :app is the Android shell (SMS in, Room storage, Compose UI) and depends on :core.
 include(":core")
+include(":app")

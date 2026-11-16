@@ -1,9 +1,20 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+// Pure Kotlin/JVM. Must never depend on Android, on a network library, or on anything
+// beyond the Kotlin standard library and the JDK.
 plugins {
-    kotlin("jvm") version "2.0.21"
+    alias(libs.plugins.kotlin.jvm)
 }
 
-repositories {
-    mavenCentral()
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
 }
 
 dependencies {
