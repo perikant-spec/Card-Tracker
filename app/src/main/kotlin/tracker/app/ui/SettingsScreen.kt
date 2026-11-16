@@ -43,7 +43,7 @@ import tracker.core.CardConfig
 
 private const val MIN_PASSWORD_LENGTH = 10
 
-private fun smsGranted(context: Context): Boolean =
+internal fun smsGranted(context: Context): Boolean =
     ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED &&
         ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED
 

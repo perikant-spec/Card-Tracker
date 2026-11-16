@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,18 +45,39 @@ fun DashboardScreen(
         if (current == null) {
             Column(modifier = Modifier.padding(padding)) { Loading() }
         } else {
-            DashboardContent(current, onCard, onReview, Modifier.padding(padding))
+            DashboardContent(current, onCard, onReview, onSettings, Modifier.padding(padding))
         }
     }
 }
 
 @Composable
-private fun DashboardContent(summary: DashboardSummary, onCard: (String) -> Unit, onReview: () -> Unit, modifier: Modifier) {
+private fun DashboardContent(
+    summary: DashboardSummary,
+    onCard: (String) -> Unit,
+    onReview: () -> Unit,
+    onSettings: () -> Unit,
+    modifier: Modifier,
+) {
+    // Evaluated on every composition, not remembered, so a permission granted in Settings is noticed on return.
+    val setupSteps = SetupChecklist.steps(summary, smsGranted(LocalContext.current))
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
+        if (setupSteps.isNotEmpty()) {
+            item {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text("Finish setting up", style = MaterialTheme.typography.titleMedium)
+                        for (step in setupSteps) {
+                            Text("• " + step, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 4.dp))
+                        }
+                        TextButton(onClick = onSettings) { Text("Open Settings") }
+                    }
+                }
+            }
+        }
         item {
             // Confidence banner: always visible, driven by the worst card.
             StatusBlock(summary.worstStatus, StatusUi.banner(summary), Modifier.fillMaxWidth())
