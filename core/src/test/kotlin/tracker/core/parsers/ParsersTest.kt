@@ -220,6 +220,12 @@ class ParsersTest {
         assertEquals(Paise.ZERO, service.cardSummary("hdfc", LocalDate.of(2026, 11, 14))!!.balance.unbilled)
     }
 
+    @Test fun `no pattern has a character class starting with a colon`() {
+        // Android's regex engine (ICU) reads "[:" as the start of a POSIX class such as [:alpha:].
+        // The JVM does not, so this portability trap would only show up on the phone.
+        for (t in IssuerParsers.TEMPLATES.values.flatten()) assertFalse(t.expanded.contains("[:"), t.name)
+    }
+
     @Test fun `every template compiles and carries a unique name`() {
         val names = IssuerParsers.TEMPLATES.values.flatten().map { it.name }
         assertEquals(names.size, names.toSet().size)

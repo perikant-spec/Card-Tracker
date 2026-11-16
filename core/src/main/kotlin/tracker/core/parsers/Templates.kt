@@ -132,10 +132,10 @@ class SmsTemplate(
             .replace("{MER}", "(?<merchant>(?:[^.;!]|[.;!](?=\\S))+?)")
             .replace(
                 "{REF}",
-                "(?:[.,;]? ?(?:Ref(?:erence)?(?: ?No)?|Txn ?(?:ID|No)|UPI Ref(?: ?No)?)\\.?[:#]? ?(?<ref>[A-Za-z0-9]{6,24})(?![A-Za-z0-9]))?",
+                "(?:[.,;]? ?(?:Ref(?:erence)?(?: ?No)?|Txn ?(?:ID|No)|UPI Ref(?: ?No)?)\\.?[#:]? ?(?<ref>[A-Za-z0-9]{6,24})(?![A-Za-z0-9]))?",
             )
             .replace("{DEAR}", "(?:(?:Dear|Hi|Hello) [A-Za-z .]{1,40}?[,!:]? )?")
-            .replace("{ALERT}", "(?:(?:Alert|Update)[:!]? ?)?")
+            .replace("{ALERT}", "(?:(?:Alert|Update)[!:]? ?)?")
             .replace("{FEEWORDS}", "(?:$FEE_WORDS)")
             .replace("{TAIL}", "(?:[\\s.,;!].*)?")
             .replace("{END}", "(?:[.;!](?:\\s.*)?)?")
@@ -162,7 +162,7 @@ object IgnoreRules {
     /** "123456 is your OTP ...", "OTP is 123456", "OTP: 123456", "Use OTP 123456", "OTP for ... is 123456". */
     private val OTP_WITH_CODE = listOf(
         Pattern.compile("(?<![0-9])[0-9]{4,8}(?![0-9]) is (?:your |the )?(?:[A-Za-z-]+ ){0,3}?$OTP_WORD\\b", FLAGS),
-        Pattern.compile("\\b$OTP_WORD\\b(?: (?:is|for|code|number|no\\.?))? ?[:-]? ?(?<![0-9])[0-9]{4,8}(?![0-9,.]*[0-9])", FLAGS),
+        Pattern.compile("\\b$OTP_WORD\\b(?: (?:is|for|code|number|no\\.?))? ?[-:]? ?(?<![0-9])[0-9]{4,8}(?![0-9,.]*[0-9])", FLAGS),
         Pattern.compile("\\b$OTP_WORD\\b[^.]{0,80}?\\bis:? ?(?<![0-9])[0-9]{4,8}(?![0-9])", FLAGS),
     )
     private val OTP_MENTION = Pattern.compile("\\b$OTP_WORD\\b", FLAGS)
