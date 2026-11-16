@@ -5,6 +5,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.UUID
+import tracker.core.parsers.IssuerParsers
 
 data class EngineConfig(
     /** A PENDING authorisation older than this is sent to the review queue. Overridable in settings. */
@@ -49,7 +50,7 @@ class LedgerService(
     private val config: EngineConfig = EngineConfig(),
     private val idGen: () -> String = { UUID.randomUUID().toString() },
     private val nowMs: () -> Long = { System.currentTimeMillis() },
-    private val parserFactory: (Map<String, List<String>>) -> SmsParser,
+    private val parserFactory: (Map<String, List<String>>) -> SmsParser = { allowlist -> IssuerParsers.router(allowlist) },
 ) {
     private var cachedAllowlist: Map<String, List<String>>? = null
     private var cachedParser: SmsParser? = null
