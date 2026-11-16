@@ -45,4 +45,20 @@ object Ledger {
 
         return CardBalance(statement.cardId, billed, unbilled, pending)
     }
+
+    /**
+     * No confirmed statement yet, so there is no bank figure to anchor on. Everything the
+     * ledger knows is reported as unbilled (charges - refunds - payments + adjustments) and
+     * billed is zero. The caller must show this with a NO_ANCHOR warning: it is not a balance
+     * the bank has agreed to, only the net of the messages seen so far.
+     */
+    fun balanceWithoutAnchor(cardId: String, txns: List<Txn>): CardBalance {
+        val mine = txns.filter { it.cardId == cardId }
+        val posted = mine.filter { it.state == TxnState.POSTED }
+        val charges = sum(posted.filter { it.type == TxnType.PURCHASE || it.type == TxnType.FEE })
+        val credits = sum(posted.filter { it.type == TxnType.REFUND || it.type == TxnType.PAYMENT })
+        val adjustments = sum(mine.filter { it.state == TxnState.ADJUSTMENT })
+        val pending = sum(mine.filter { it.state == TxnState.PENDING && it.type == TxnType.PURCHASE })
+        return CardBalance(cardId, Paise.ZERO, charges - credits + adjustments, pending)
+    }
 }

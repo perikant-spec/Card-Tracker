@@ -16,6 +16,26 @@ value class Paise(val value: Long) : Comparable<Paise> {
     }
 }
 
+/** Indian digit grouping for display, e.g. 12550050 paise -> "1,25,500.50". Integer maths only. */
+fun Paise.formatInr(): String {
+    val abs = Math.abs(value)
+    val rupees = (abs / 100).toString()
+    val paise = (abs % 100).toString().padStart(2, '0')
+    val grouped = if (rupees.length <= 3) rupees else {
+        val head = rupees.dropLast(3)
+        val tail = rupees.takeLast(3)
+        val parts = ArrayList<String>()
+        var rest = head
+        while (rest.length > 2) {
+            parts.add(0, rest.takeLast(2))
+            rest = rest.dropLast(2)
+        }
+        if (rest.isNotEmpty()) parts.add(0, rest)
+        parts.joinToString(",") + "," + tail
+    }
+    return (if (value < 0) "-" else "") + grouped + "." + paise
+}
+
 enum class TxnType { PURCHASE, FEE, PAYMENT, REFUND }
 
 /**
@@ -48,6 +68,10 @@ data class Txn(
     val merchant: String? = null,
     val ref: String? = null,
     val linkedTo: String? = null,
+    /** Hash of the SMS this row came from (never the SMS text itself). Null for manual rows. */
+    val sourceHash: String? = null,
+    /** Free-text reason, used for ADJUSTMENT and manually classified rows. */
+    val note: String? = null,
 )
 
 /** The bank's own figure for a closed cycle. The only number the bank commits to. */
